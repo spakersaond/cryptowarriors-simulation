@@ -184,7 +184,7 @@ export default function CampaignPage() {
           ''
         )}
         <p className="text-lg font-semibold">Tiers: </p>
-        <div className="grid grid-cols-3 gap-4 motion-preset-shrink overflow-y-hidden overflow-hidden">
+        <div className="grid grid-cols-3 gap-4 motion-preset-slide-right overflow-y-hidden overflow-hidden">
           {balance >= goal || (Number(balance) === 0 && totalBackers > 0)
             ? ''
             : tiers && tiers.length > 0

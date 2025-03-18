@@ -33,6 +33,7 @@ export default function TierCard({ tier, index, contract, isEditing }) {
             cursor: 'pointer',
             overflowY: 'hidden',
             overflowX: 'hidden',
+            height: '50px',
           }}
         >
           Select
