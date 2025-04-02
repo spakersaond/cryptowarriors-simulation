@@ -90,6 +90,11 @@ const Navbar = () => {
                     Instructions
                   </p>
                 </Link>
+                <Link to={'https://cryptowarriors-simulation.netlify.app/'}>
+                  <p className="rounded-md px-3 py-2 text-lg font-medium text-slate-700 active:text-red-900 hover:underline hover:text-red-500 hover:motion-preset-fade active:motion-preset-expand">
+                    Go Back
+                  </p>
+                </Link>
               </div>
             </div>
           </div>

@@ -6,3 +6,7 @@
 .css-whd00g {
   overflow: hidden;
 }
+
+div[data-img-container='true'] {
+  overflow: hidden;
+}
