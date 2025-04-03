@@ -57,7 +57,9 @@ export default function CampaignCard({ campaignAddress }) {
             <div className="relative w-full h-6 bg-gray-700 rounded-full dark:bg-gray-700">
               <div
                 className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 text-right"
-                style={{ width: `${balancePercentage?.toString()}%` }}
+                style={{
+                  width: `${balancePercentage?.toString()}%`,
+                }}
               >
                 <p className="text-white dark:text-white text-xs p-1">
                   ${balance?.toString()}
@@ -66,7 +68,7 @@ export default function CampaignCard({ campaignAddress }) {
               <p className="absolute top-0 right-0 text-white dark:text-white text-xs p-1">
                 {balancePercentage >= 100
                   ? ''
-                  : `${balancePercentage?.toString()}%`}
+                  : `${Number(balancePercentage || 0).toFixed(2)}%`}
               </p>
             </div>
           </div>
