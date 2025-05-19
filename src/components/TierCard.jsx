@@ -46,6 +46,7 @@ export default function TierCard({ tier, index, contract, isEditing }) {
               contract,
               method: 'function removeTier(uint256 _index)',
               params: [BigInt(index)],
+              overflow: 'hidden',
             })
           }
           onTransactionConfirmed={async () => alert('Removed successfully!')}
@@ -56,6 +57,7 @@ export default function TierCard({ tier, index, contract, isEditing }) {
             padding: '0.5rem 1rem',
             borderRadius: '0.375rem',
             cursor: 'pointer',
+            height: '50px',
           }}
         >
           Remove

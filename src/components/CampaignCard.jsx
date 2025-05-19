@@ -3,12 +3,14 @@ import { baseSepolia } from 'thirdweb/chains'
 import { client } from '../client'
 import { useReadContract } from 'thirdweb/react'
 import { Link } from 'react-router-dom'
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { GlobalContext } from '../GlobalProvider'
 
 export default function CampaignCard({ campaignAddress }) {
   const [isExpanded, setIsExpanded] = useState(false)
   const toggleExpand = () => setIsExpanded(!isExpanded)
   const maxLength = 150
+  const { updatedCampaigns, setUpdatedCampaigns } = useContext(GlobalContext)
 
   const contract = getContract({
     client: client,
@@ -48,6 +50,23 @@ export default function CampaignCard({ campaignAddress }) {
   if (balancePercentage >= 100) {
     balancePercentage = 100
   }
+
+  const convertedBalance = parseInt(String(totalBalance))
+  const convertedGoal = parseInt(String(totalGoal))
+
+  useEffect(() => {
+    if (convertedBalance >= convertedGoal) {
+      setUpdatedCampaigns((prevCampaigns) =>
+        prevCampaigns.map((campaign) =>
+          campaign.campaignAddress === campaignAddress &&
+          campaign.state === 'notFinished'
+            ? { ...campaign, state: 'finished' }
+            : campaign
+        )
+      )
+    }
+    console.log('updated campaigns: ', updatedCampaigns)
+  }, [convertedBalance, convertedGoal, campaignAddress])
 
   return (
     <div className="flex flex-col justify-between max-w-sm p-6 bg-white border-solid border-2 border-slate-200 rounded-lg shadow">

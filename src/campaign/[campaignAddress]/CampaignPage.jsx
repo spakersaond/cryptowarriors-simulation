@@ -231,7 +231,7 @@ const CreateTierModal = ({ setIsModalOpen, contract }) => {
             Close
           </button>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col overflow-hidden">
           <label>Tier Name: </label>
           <input
             type="text"
@@ -260,6 +260,9 @@ const CreateTierModal = ({ setIsModalOpen, contract }) => {
               setIsModalOpen(false)
             }}
             theme={lightTheme()}
+            style={{
+              overflow: 'hidden',
+            }}
           >
             Add Tier
           </TransactionButton>

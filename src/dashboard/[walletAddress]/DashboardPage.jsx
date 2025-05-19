@@ -6,8 +6,6 @@ import { useActiveAccount, useReadContract } from 'thirdweb/react'
 import CampaignCard from '../../components/CampaignCard'
 import { useState } from 'react'
 import { deployPublishedContract } from 'thirdweb/deploys'
-import moment from 'moment'
-import { useParams } from 'react-router-dom'
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -42,7 +40,7 @@ export default function DashboardPage() {
     cpyCampaigns.map((campaign, index) => {
       if (
         account.address === '0x12891D99bf48a07CAFbD682f38A5595414728be5' &&
-        index > 11
+        index > 21
       ) {
         latestCampaigns = [...latestCampaigns, campaign]
       }
@@ -63,7 +61,11 @@ export default function DashboardPage() {
   let numberOfPages = []
 
   if (reverseCampaigns && reverseCampaigns.length > 0) {
-    for (let i = 1; i <= Math.ceil(latestCampaigns.length / postPerPage); i++) {
+    for (
+      let i = 1;
+      i <= Math.ceil(reverseCampaigns.length / postPerPage);
+      i++
+    ) {
       numberOfPages = [...numberOfPages, i]
       console.log('This is the number being appended in pages array: ', i)
     }
@@ -190,7 +192,7 @@ const CreateCampaignModal = ({ setIsModalOpen, refetch }) => {
           _name: campaignName,
           _description: campaignDescription,
           _goal: campaignGoal,
-          _durationInDays: 1,
+          _durationInDays: 10000,
         },
         publisher: '0x24D95b293b830De1969685626800B582367FAf5A',
         version: '1.0.0',
@@ -247,6 +249,7 @@ const CreateCampaignModal = ({ setIsModalOpen, refetch }) => {
             value={campaignGoal}
             onChange={(e) => handleCampaignGoal(parseInt(e.target.value))}
             className="mb-4 px-4 py-2 bg-slate-300 rounded-md"
+            // className="mb-4 px-4 py-2 bg-slate-300 rounded-md appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]"
           />
 
           <button
@@ -254,7 +257,7 @@ const CreateCampaignModal = ({ setIsModalOpen, refetch }) => {
             onClick={handleDeployContract}
           >
             {isDeployingContract
-              ? 'Creating Fundraising `Project...'
+              ? 'Creating Fundraising Project...'
               : 'Create Fundraising Project'}
           </button>
         </div>
