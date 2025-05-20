@@ -4,8 +4,9 @@ import { baseSepolia } from 'thirdweb/chains'
 import { CROWDFUNDING_FACTORY } from '../../constants/contracts'
 import { useActiveAccount, useReadContract } from 'thirdweb/react'
 import CampaignCard from '../../components/CampaignCard'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { deployPublishedContract } from 'thirdweb/deploys'
+import { GlobalContext } from '../../GlobalProvider'
 
 export default function DashboardPage() {
   const [currentPage, setCurrentPage] = useState(1)
@@ -13,6 +14,7 @@ export default function DashboardPage() {
   const account = useActiveAccount()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const { updatedCampaigns } = useContext(GlobalContext)
 
   const contract = getContract({
     client: client,
@@ -54,23 +56,34 @@ export default function DashboardPage() {
 
   console.log('This is reverse Campaigns: ', reverseCampaigns)
 
+  console.log(
+    'These are the campaigns from Global Provider: ',
+    updatedCampaigns
+  )
+  const matchingCampaigns = updatedCampaigns.filter((item1) =>
+    reverseCampaigns.some((item2) => item2.id === item1.id)
+  )
+
+  const updatedCampaignsCpy = matchingCampaigns.filter(
+    (campaign) => campaign.state === 'notFinished'
+  )
+
   let currentCampaigns = []
   const lastPostIndex = currentPage * postPerPage
   const firstPostIndex = lastPostIndex - postPerPage
 
   let numberOfPages = []
 
-  if (reverseCampaigns && reverseCampaigns.length > 0) {
+  if (updatedCampaignsCpy && updatedCampaignsCpy.length > 0) {
     for (
       let i = 1;
-      i <= Math.ceil(reverseCampaigns.length / postPerPage);
+      i <= Math.ceil(updatedCampaignsCpy.length / postPerPage);
       i++
     ) {
       numberOfPages = [...numberOfPages, i]
-      console.log('This is the number being appended in pages array: ', i)
     }
-    console.log('Number of pages: ', numberOfPages)
-    currentCampaigns = reverseCampaigns.slice(firstPostIndex, lastPostIndex)
+
+    currentCampaigns = updatedCampaignsCpy.slice(firstPostIndex, lastPostIndex)
   }
 
   if (account) {
@@ -87,7 +100,7 @@ export default function DashboardPage() {
       )
     }
   }
-  console.log('This is current campaigns: ', currentCampaigns)
+
   return (
     <div className="mx-auto max-w-7xl px-4 mt-16 sm:px-6 lg:px-8">
       <div className="flex flex-row justify-between items-center mb-8">
@@ -105,41 +118,14 @@ export default function DashboardPage() {
           myCampaigns &&
           (currentCampaigns && currentCampaigns.length > 0 ? (
             currentCampaigns.map((campaign, index) => {
-              // const dateObj = new Date(Number(campaign.creationTime) * 1000)
-              // let dateNow = moment().format('YYYY-MM-DD')
-              // let dateCreated = moment(dateObj).format('YYYY-MM-DD')
-              // let dateOneFormatted = dateCreated.trim().split(' ').join('/')
-              // let date1 = new Date(dateOneFormatted)
-              // let dateTwoFormatted = dateNow.trim().split(' ').join('/')
-              // let date2 = new Date(dateTwoFormatted)
-
-              // // console.log("Date1 and Date2: ", date1, date2);
-
-              // let Difference_In_Time = date2.getTime() - date1.getTime()
-
-              // // Calculating the no. of days between
-              // // two dates
-              // let Difference_In_Days = Math.round(
-              //   Difference_In_Time / (1000 * 3600 * 24)
-              // )
-
-              // // To display the final no. of days (result)
-              // console.log(
-              //   'Total number of days between dates:\n' +
-              //     date1.toDateString() +
-              //     ' and ' +
-              //     date2.toDateString() +
-              //     ' is: ' +
-              //     Difference_In_Days +
-              //     ' days'
-              // )
-
-              return (
-                <CampaignCard
-                  key={index}
-                  campaignAddress={campaign.campaignAddress}
-                />
-              )
+              if (campaign.state === 'notFinished') {
+                return (
+                  <CampaignCard
+                    key={index}
+                    campaignAddress={campaign.campaignAddress}
+                  />
+                )
+              }
             })
           ) : (
             <p>No campaigns found</p>

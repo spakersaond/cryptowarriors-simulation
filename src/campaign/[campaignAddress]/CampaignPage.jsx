@@ -195,6 +195,7 @@ export default function CampaignPage() {
                   index={index}
                   contract={contract}
                   isEditing={isEditing}
+                  accountAddress={account.address}
                 />
               ))
             : !isEditing && <p>No Tiers Available</p>}
